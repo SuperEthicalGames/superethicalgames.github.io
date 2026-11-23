@@ -144,15 +144,19 @@
   });
   const restaurarPagina = ({ win }) => { win.Pagina.filtrar('todos'); win.Pagina.iniciar(entornoSimulado(false, true)); };
 
-  prueba('puedeJugar_false_en_tactil_o_sin_webgl2', ({ win }) => {
+  prueba('puedeJugar_depende_de_webgl2_y_tambien_vale_en_celular', ({ win }) => {
     afirmar(win.Pagina && typeof win.Pagina.puedeJugar === 'function', 'no existe window.Pagina.puedeJugar');
-    afirmar(win.Pagina.puedeJugar(entornoSimulado(true, true)) === false, 'con puntero táctil debía ser false');
+    afirmar(win.Pagina.puedeJugar(entornoSimulado(true, true)) === true, 'un celular con webgl2 debía poder jugar (controles táctiles)');
+    afirmar(win.Pagina.puedeJugar(entornoSimulado(false, true)) === true, 'con ratón y webgl2 debía ser true');
     afirmar(win.Pagina.puedeJugar(entornoSimulado(false, false)) === false, 'sin webgl2 debía ser false');
-    afirmar(win.Pagina.puedeJugar(entornoSimulado(true, false)) === false, 'táctil y sin webgl2 debía ser false');
+    afirmar(win.Pagina.puedeJugar(entornoSimulado(true, false)) === false, 'celular sin webgl2 debía ser false');
     afirmar(win.Pagina.puedeJugar({ matchMedia: () => { throw new Error('x'); }, crearCanvas: () => { throw new Error('x'); } }) === false, 'si el entorno falla debía ser false');
   });
-  prueba('puedeJugar_true_con_raton_y_webgl2', ({ win }) => {
-    afirmar(win.Pagina.puedeJugar(entornoSimulado(false, true)) === true, 'con ratón y webgl2 debía ser true');
+  prueba('esTactil_detecta_el_puntero_grueso', ({ win }) => {
+    afirmar(typeof win.Pagina.esTactil === 'function', 'no existe window.Pagina.esTactil');
+    afirmar(win.Pagina.esTactil(entornoSimulado(true, true)) === true, 'con puntero grueso debía ser true');
+    afirmar(win.Pagina.esTactil(entornoSimulado(false, true)) === false, 'con ratón debía ser false');
+    afirmar(win.Pagina.esTactil({ matchMedia: () => { throw new Error('x'); } }) === false, 'si el entorno falla debía ser false');
   });
   prueba('filtro_vr_oculta_las_tarjetas_de_otras_categorias', ({ doc, win }) => {
     win.Pagina.filtrar('vr');
@@ -177,7 +181,7 @@
     restaurarPagina({ win });
   });
   prueba('iniciar_sin_puedeJugar_oculta_botones_de_entrada_y_muestra_aviso', ({ doc, win }) => {
-    win.Pagina.iniciar(entornoSimulado(true, true));
+    win.Pagina.iniciar(entornoSimulado(false, false));   // sin WebGL2 no se puede abrir el museo
     const botones = [...doc.querySelectorAll('[data-abrir-museo]')];
     afirmar(botones.length >= 2 && botones.every((b) => b.hidden), 'los botones de entrada debían ocultarse');
     const aviso = doc.querySelector('.solo-movil');
@@ -551,7 +555,7 @@
     const aviso = doc.getElementById('escenario-carga-texto').textContent;
     limpiarMuseo({ win });
     afirmar(visible, 'el escenario debía abrirse');
-    afirmar(/36/.test(aviso), 'el aviso debía mencionar los 36 MB: ' + aviso);
+    afirmar(/38/.test(aviso), 'el aviso debía mencionar los 38 MB (datos 27,3 + wasm 10,6 del último build): ' + aviso);
     afirmar(manifestPedido === 1 && instancias === 0, 'debía pedir el manifest una vez y no crear la instancia aún');
   });
   prueba('museo_abrir_pide_manifest_y_crea_instancia_con_progreso', async ({ doc, win }) => {
@@ -611,26 +615,85 @@
     limpiarMuseo({ win });
     afirmar(logrado, 'tras Reintentar con red debía cargarse el museo');
   });
-  prueba('museo_esc_cierra_solo_sin_panel_abierto_ni_puntero_bloqueado', async ({ doc, win }) => {
+  // ---- Ratón anclado al juego: el clic lo ancla, Esc lo suelta (lo hace el navegador) y el juego se entera
+  const anclarFalso = (doc, canvas) => Object.defineProperty(doc, 'pointerLockElement', { get: () => canvas, configurable: true });
+  const panelAviso = (win, abierto) => win.dispatchEvent(new win.CustomEvent('museo', { detail: { nombre: 'panel', dato: abierto ? '1' : '0' } }));
+
+  prueba('museo_esc_con_el_juego_en_marcha_solo_suelta_el_raton_y_durante_la_carga_sale', async ({ doc, win }) => {
     const tecla = () => doc.dispatchEvent(new win.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
     win.Museo.configurar(dependenciasOk(win));
     await win.Museo.abrir();
     tecla();
-    afirmar(doc.getElementById('escenario').hidden, 'Esc sin panel debía cerrar el museo');
-    await win.Museo.abrir();
-    win.dispatchEvent(new win.CustomEvent('museo', { detail: { nombre: 'panel', dato: '1' } }));
+    const siguioAbierto = !doc.getElementById('escenario').hidden;   // en marcha, Esc suelta el ratón (lo hace el navegador) y el museo sigue
+    win.Museo.cerrar();
+    win.Museo.configurar({ cargarManifest: () => new Promise(() => {}) });
+    win.Museo.abrir();
+    await esperar(30);
     tecla();
-    afirmar(!doc.getElementById('escenario').hidden, 'con un panel abierto Esc no debía cerrar el museo');
-    win.dispatchEvent(new win.CustomEvent('museo', { detail: { nombre: 'panel', dato: '0' } }));
-    Object.defineProperty(doc, 'pointerLockElement', { get: () => doc.body, configurable: true });
-    tecla();
-    const siguioAbierto = !doc.getElementById('escenario').hidden;
-    delete doc.pointerLockElement;
-    tecla();
-    const cerro = doc.getElementById('escenario').hidden;
+    const salioCargando = doc.getElementById('escenario').hidden;     // sin juego al que soltarle el ratón, Esc sale
     limpiarMuseo({ win });
-    afirmar(siguioAbierto, 'con el puntero bloqueado Esc no debía cerrar el museo');
-    afirmar(cerro, 'sin panel ni puntero bloqueado Esc debía cerrar');
+    afirmar(siguioAbierto, 'con el juego en marcha Esc no debía cerrar el museo');
+    afirmar(salioCargando, 'durante la carga Esc debía cerrar el museo');
+  });
+  prueba('museo_el_clic_en_el_juego_ancla_el_raton_salvo_con_panel_abierto_o_ya_anclado', async ({ doc, win }) => {
+    win.Museo.configurar(dependenciasOk(win));
+    await win.Museo.abrir();
+    const canvas = doc.getElementById('escenario-lienzo').querySelector('canvas');
+    let pedidos = 0;
+    canvas.requestPointerLock = () => { pedidos++; };
+    const clic = () => canvas.dispatchEvent(new win.MouseEvent('click', { bubbles: true }));
+    clic(); const conRatonLibre = pedidos;
+    panelAviso(win, true); clic(); const conPanel = pedidos;
+    panelAviso(win, false);
+    anclarFalso(doc, canvas); clic(); const yaAnclado = pedidos;
+    delete doc.pointerLockElement;
+    limpiarMuseo({ win });
+    afirmar(conRatonLibre === 1, 'el clic con el ratón libre debía pedir el bloqueo y pidió ' + conRatonLibre + ' vez/veces');
+    afirmar(conPanel === 1, 'con un panel abierto el clic no debía pedir el bloqueo (hace falta el cursor libre)');
+    afirmar(yaAnclado === 1, 'con el ratón ya anclado no debía volver a pedirlo');
+  });
+  prueba('museo_avisa_al_juego_cuando_el_raton_se_ancla_o_se_suelta', async ({ doc, win }) => {
+    const inst = instanciaFalsa();
+    win.Museo.configurar(dependenciasOk(win, inst));
+    await win.Museo.abrir();
+    const canvas = doc.getElementById('escenario-lienzo').querySelector('canvas');
+    const avisos = () => inst.enviados.filter((a) => a[0] === 'MuseoPuente' && a[1] === 'RatonAnclado').map((a) => a[2]);
+    const alAbrir = avisos().join();
+    anclarFalso(doc, canvas); doc.dispatchEvent(new win.Event('pointerlockchange'));
+    delete doc.pointerLockElement; doc.dispatchEvent(new win.Event('pointerlockchange'));
+    const todos = avisos().join();
+    limpiarMuseo({ win });
+    afirmar(alAbrir === '0', 'al abrir el ratón está libre: debía avisar RatonAnclado(0) y avisó "' + alAbrir + '"');
+    afirmar(todos === '0,1,0', 'debía avisar 0 → 1 (anclado) → 0 (suelto) y avisó "' + todos + '"');
+  });
+  prueba('museo_la_pista_de_anclar_el_raton_se_ve_solo_con_el_juego_en_marcha_y_el_raton_libre', async ({ doc, win }) => {
+    const pista = () => doc.getElementById('escenario-pista');
+    afirmar(pista(), 'falta #escenario-pista');
+    win.Museo.configurar({ cargarManifest: () => new Promise(() => {}) });
+    win.Museo.abrir();
+    await esperar(30);
+    const durantelaCarga = pista().hidden;
+    win.Museo.cerrar();
+    win.Museo.configurar(dependenciasOk(win));
+    await win.Museo.abrir();
+    const canvas = doc.getElementById('escenario-lienzo').querySelector('canvas');
+    const libre = !pista().hidden;
+    anclarFalso(doc, canvas); doc.dispatchEvent(new win.Event('pointerlockchange'));
+    const anclado = pista().hidden;
+    delete doc.pointerLockElement; doc.dispatchEvent(new win.Event('pointerlockchange'));
+    const suelto = !pista().hidden;
+    panelAviso(win, true);
+    const conPanel = pista().hidden;
+    panelAviso(win, false);
+    win.Museo.cerrar();
+    const cerrado = pista().hidden;
+    limpiarMuseo({ win });
+    afirmar(durantelaCarga, 'durante la carga no debía verse la pista');
+    afirmar(libre, 'con el juego en marcha y el ratón libre debía verse la pista');
+    afirmar(anclado, 'con el ratón anclado la pista debía ocultarse');
+    afirmar(suelto, 'al soltar el ratón (Esc) la pista debía volver');
+    afirmar(conPanel, 'con un panel abierto la pista no debía verse');
+    afirmar(cerrado, 'al cerrar el museo la pista debía ocultarse');
   });
   prueba('museo_el_boton_de_entrada_abre_y_salir_cierra', async ({ doc, win }) => {
     win.Museo.configurar(dependenciasOk(win));
@@ -643,6 +706,130 @@
     limpiarMuseo({ win });
     afirmar(abierto, 'el botón de entrada debía abrir el museo');
     afirmar(cerrado, 'Salir debía cerrar el museo');
+  });
+
+  // ---- Controles táctiles del museo (celular en horizontal)
+  const conEscenarioVisible = async (doc, fn) => {
+    const e = doc.getElementById('escenario'), antes = e.hidden;
+    e.hidden = false;
+    try { return await fn(); } finally { e.hidden = antes; }
+  };
+  const nuevoTactil = (win, extra) => {
+    const enviados = [];
+    const c = win.Tactil.iniciar(Object.assign({ enviar: (m, v) => enviados.push([m, v]), entorno: entornoSimulado(true, true), manual: true }, extra || {}));
+    return { c, enviados };
+  };
+  const toque = (win, tipo, x, y, id) => new win.PointerEvent(tipo, { pointerId: id || 1, clientX: x, clientY: y, bubbles: true, cancelable: true, pointerType: 'touch' });
+  const ultimoEnvio = (enviados, metodo) => { const e = enviados.filter((a) => a[0] === metodo).pop(); return e ? e[1] : null; };
+  const numeros = (s) => String(s).split(',').map(Number);
+
+  prueba('tactil_no_arranca_si_el_dispositivo_no_es_tactil', ({ win }) => {
+    afirmar(win.Tactil && typeof win.Tactil.iniciar === 'function', 'no existe window.Tactil.iniciar');
+    afirmar(win.Tactil.iniciar({ enviar: () => {}, entorno: entornoSimulado(false, true), manual: true }) === null, 'con ratón debía devolver null');
+  });
+  prueba('tactil_activar_muestra_los_controles_y_avisa_al_juego', async ({ doc, win }) => {
+    await conEscenarioVisible(doc, async () => {
+      const { c, enviados } = nuevoTactil(win);
+      afirmar(c, 'Tactil.iniciar devolvió null en un dispositivo táctil');
+      const caja = doc.getElementById('tactil');
+      afirmar(caja && caja.hidden, 'los controles táctiles debían empezar ocultos');
+      c.activar(true);
+      const visible = !caja.hidden;
+      c.activar(false);
+      const oculto = caja.hidden;
+      c.parar();
+      afirmar(visible, 'activar(true) debía mostrar los controles');
+      afirmar(oculto, 'activar(false) debía ocultarlos');
+      afirmar(enviados[0] && enviados[0][0] === 'TactilActivo' && enviados[0][1] === 1, 'debía avisar TactilActivo(1): ' + JSON.stringify(enviados));
+      afirmar(enviados[enviados.length - 1][0] === 'TactilActivo' && enviados[enviados.length - 1][1] === 0, 'al desactivar debía avisar TactilActivo(0)');
+    });
+  });
+  prueba('tactil_el_joystick_manda_el_movimiento_recortado_y_se_detiene_al_soltar', async ({ doc, win }) => {
+    await conEscenarioVisible(doc, async () => {
+      const { c, enviados } = nuevoTactil(win);
+      c.activar(true);
+      const base = doc.getElementById('tactil-joystick'), r = base.getBoundingClientRect();
+      const cx = r.left + r.width / 2, cy = r.top + r.height / 2, R = r.width / 2;
+      base.dispatchEvent(toque(win, 'pointerdown', cx, cy));
+      base.dispatchEvent(toque(win, 'pointermove', cx + 3 * R, cy));        // muy a la derecha: se recorta a 1
+      const derecha = numeros(ultimoEnvio(enviados, 'TactilMover'));
+      base.dispatchEvent(toque(win, 'pointermove', cx, cy - R));            // arriba = adelante (y positivo)
+      const arriba = numeros(ultimoEnvio(enviados, 'TactilMover'));
+      base.dispatchEvent(toque(win, 'pointermove', cx + 0.02 * R, cy));     // dentro de la zona muerta
+      const quieto = numeros(ultimoEnvio(enviados, 'TactilMover'));
+      base.dispatchEvent(toque(win, 'pointerup', cx, cy));
+      const suelto = ultimoEnvio(enviados, 'TactilMover');
+      c.parar();
+      afirmar(R > 20, 'el joystick debía tener tamaño y su radio es ' + R);
+      afirmar(Math.abs(derecha[0] - 1) < 0.01 && Math.abs(derecha[1]) < 0.01, 'a la derecha debía ser (1, 0) y fue ' + derecha);
+      afirmar(Math.abs(arriba[0]) < 0.01 && Math.abs(arriba[1] - 1) < 0.01, 'arriba debía ser adelante (0, 1) y fue ' + arriba);
+      afirmar(quieto[0] === 0 && quieto[1] === 0, 'dentro de la zona muerta debía ser (0, 0) y fue ' + quieto);
+      afirmar(suelto === '0.000,0.000', 'al soltar debía mandar 0.000,0.000 y mandó ' + suelto);
+    });
+  });
+  prueba('tactil_arrastrar_para_mirar_manda_el_giro_acumulado_con_la_sensibilidad', async ({ doc, win }) => {
+    await conEscenarioVisible(doc, async () => {
+      const { c, enviados } = nuevoTactil(win);
+      c.activar(true);
+      const area = doc.getElementById('tactil-mirar');
+      area.dispatchEvent(toque(win, 'pointerdown', 100, 100, 7));
+      area.dispatchEvent(toque(win, 'pointermove', 150, 80, 7));
+      area.dispatchEvent(toque(win, 'pointermove', 160, 80, 7));
+      c.vaciar();
+      const giro = numeros(ultimoEnvio(enviados, 'TactilMirar'));
+      area.dispatchEvent(toque(win, 'pointerup', 160, 80, 7));
+      c.vaciar();
+      const mandados = enviados.filter((a) => a[0] === 'TactilMirar').length;
+      const s = c.sensibilidad;
+      c.parar();
+      afirmar(s > 0, 'debía exponer la sensibilidad');
+      afirmar(Math.abs(giro[0] - 60 * s) < 0.01 && Math.abs(giro[1] + 20 * s) < 0.01, 'el giro debía ser (60, -20) × ' + s + ' y fue ' + giro);
+      afirmar(mandados === 1, 'sin movimiento nuevo no debía mandar más giros y mandó ' + mandados);
+    });
+  });
+  prueba('tactil_los_botones_mandan_su_accion_y_correr_alterna', async ({ doc, win }) => {
+    await conEscenarioVisible(doc, async () => {
+      const { c, enviados } = nuevoTactil(win);
+      c.activar(true);
+      const acciones = ['interactuar', 'carrito', 'creditos', 'musica', 'idioma', 'cerrar'];
+      acciones.forEach((n) => {
+        const b = doc.querySelector('#tactil [data-accion="' + n + '"]');
+        afirmar(b, 'falta el botón de la acción ' + n);
+        b.dispatchEvent(toque(win, 'pointerdown', 0, 0));
+      });
+      const correr = doc.querySelector('#tactil [data-accion="correr"]');
+      afirmar(correr, 'falta el botón de correr');
+      correr.dispatchEvent(toque(win, 'pointerdown', 0, 0));
+      const activado = correr.getAttribute('aria-pressed');
+      correr.dispatchEvent(toque(win, 'pointerdown', 0, 0));
+      const desactivado = correr.getAttribute('aria-pressed');
+      const mandadas = enviados.filter((a) => a[0] === 'TactilAccion').map((a) => a[1]);
+      c.parar();
+      afirmar(mandadas.join() === acciones.concat(['correr:1', 'correr:0']).join(), 'acciones mandadas: ' + mandadas.join());
+      afirmar(activado === 'true' && desactivado === 'false', 'correr debía alternar aria-pressed: ' + activado + ' → ' + desactivado);
+    });
+  });
+  prueba('tactil_con_un_panel_abierto_solo_queda_el_boton_cerrar_y_se_suelta_el_joystick', async ({ doc, win }) => {
+    await conEscenarioVisible(doc, async () => {
+      const { c, enviados } = nuevoTactil(win);
+      c.activar(true);
+      const joystick = doc.getElementById('tactil-joystick'), mirar = doc.getElementById('tactil-mirar'), cerrar = doc.querySelector('#tactil [data-accion="cerrar"]');
+      const normal = !joystick.hidden && !mirar.hidden && cerrar.hidden;
+      c.panel(true);
+      const conPanel = joystick.hidden && mirar.hidden && !cerrar.hidden;
+      const soltado = ultimoEnvio(enviados, 'TactilMover');
+      c.panel(false);
+      const sinPanel = !joystick.hidden && !mirar.hidden && cerrar.hidden;
+      c.parar();
+      afirmar(normal, 'sin panel debían verse joystick y área de mirar, y no el botón cerrar');
+      afirmar(conPanel, 'con un panel abierto debían ocultarse joystick y área de mirar (dejan pasar los toques al juego) y verse cerrar');
+      afirmar(soltado === '0.000,0.000', 'al abrir un panel el joystick debía soltarse: ' + soltado);
+      afirmar(sinPanel, 'al cerrar el panel debía volver a lo normal');
+    });
+  });
+  prueba('tactil_hay_aviso_para_girar_el_celular_en_horizontal', ({ doc }) => {
+    const aviso = doc.getElementById('tactil-girar');
+    afirmar(aviso && aviso.dataset.i18n && aviso.textContent.trim(), 'falta el aviso #tactil-girar con texto traducible');
   });
 
   prueba('liquido_pausar_y_reanudar', ({ doc, win }) => {

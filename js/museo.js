@@ -47,6 +47,28 @@
     });
   }
 
+  let ultimoAnclado = null;
+  const anclado = () => !!canvas && document.pointerLockElement === canvas;
+  /** Controlador de los controles táctiles (solo existe en dispositivos con puntero grueso). */
+  const tactil = () => (window.Tactil && window.Tactil.controlador) || null;
+
+  /** Le dice al juego si el ratón está anclado (solo entonces la cámara sigue al ratón) y muestra u oculta la pista para anclarlo. */
+  function actualizarRaton() {
+    const a = anclado();
+    if (instancia && a !== ultimoAnclado) { ultimoAnclado = a; enviar('RatonAnclado', a ? 1 : 0); }
+    const pista = el('escenario-pista');
+    if (pista) pista.hidden = !(estado.abierto && instancia && !estado.panelAbierto && !a && !tactil());
+  }
+
+  /** Un clic en el juego ancla el ratón. Con un panel abierto no: ahí hace falta el cursor libre para leer y pulsar. */
+  function anclarRaton() {
+    if (!instancia || !canvas || estado.cargando || estado.panelAbierto || anclado() || tactil()) return;
+    try {
+      const p = canvas.requestPointerLock();
+      if (p && p.catch) p.catch(() => {});   // el navegador puede rechazarlo (p. ej. justo después de Esc): la pista sigue visible
+    } catch (e) { /* sin bloqueo de puntero */ }
+  }
+
   function mostrarCarga() {
     el('escenario-carga').hidden = false;
     el('escenario-error').hidden = true;
@@ -86,6 +108,9 @@
       canvas.focus();
       // El 'listo' que el juego emite en Start sale antes de que exista la instancia: el saludo lo repite ahora.
       enviar('Saludar', '');
+      ultimoAnclado = null;
+      actualizarRaton();   // al empezar el ratón está libre hasta el primer clic: el juego no debe mover la cámara con él
+      if (tactil()) tactil().activar(true);   // en el celular, controles táctiles en lugar de ratón y teclado
     } catch (causa) {
       if (lienzoCanvas) lienzoCanvas.remove();
       if (mi.cancelado) return;
@@ -105,6 +130,7 @@
       return;
     }
     disparador = document.activeElement;
+    if (window.Tactil && tactil()) window.Tactil.pantallaCompleta(el('escenario'));   // se pide aquí, dentro del gesto del visitante
     estado.abierto = true; estado.cargando = true; estado.panelAbierto = false;
     el('escenario').hidden = false;
     document.documentElement.classList.add('museo-abierto');
@@ -132,6 +158,9 @@
       try { const r = vieja.Quit(); if (r && r.catch) r.catch(() => {}); } catch (e) { /* ya cerrada */ }
     }
     estado.abierto = false; estado.cargando = false; estado.panelAbierto = false;
+    if (tactil()) { tactil().activar(false); window.Tactil.salirPantallaCompleta(); }
+    ultimoAnclado = null;
+    actualizarRaton();
     el('escenario').hidden = true;
     document.documentElement.classList.remove('museo-abierto');
     pausarLiquido(false);
@@ -154,7 +183,11 @@
 
   function alAviso(e) {
     const d = e.detail || {};
-    if (d.nombre === 'panel') estado.panelAbierto = d.dato === '1';
+    if (d.nombre === 'panel') {
+      estado.panelAbierto = d.dato === '1';
+      actualizarRaton();
+      if (tactil()) tactil().panel(estado.panelAbierto);
+    }
     else if (d.nombre === 'listo') {
       if (!instancia) return;   // el de Start llega antes de tener la instancia; se espera el saludo
       if (window.Idioma) enviar('PonerIdioma', window.Idioma.actual());
@@ -177,8 +210,14 @@
     if (salir) salir.addEventListener('click', cerrar);
     if (reint) reint.addEventListener('click', reintentar);
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && estado.abierto && !document.pointerLockElement && !estado.panelAbierto) cerrar();
+      // Con el juego en marcha Esc solo suelta el ratón (lo hace el navegador) y se sale con el botón Salir.
+      // Mientras carga, o si falló, no hay juego al que soltarle el ratón: ahí Esc sale.
+      if (e.key === 'Escape' && estado.abierto && !instancia) cerrar();
     });
+    document.addEventListener('pointerlockchange', actualizarRaton);
+    document.addEventListener('pointerlockerror', actualizarRaton);
+    const lienzoJuego = el('escenario-lienzo');
+    if (lienzoJuego) lienzoJuego.addEventListener('click', anclarRaton);
     window.addEventListener('museo', alAviso);
     document.querySelectorAll('a[data-obra]').forEach((a) => a.addEventListener('click', (e) => {
       e.preventDefault();

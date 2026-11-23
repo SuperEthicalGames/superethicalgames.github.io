@@ -200,6 +200,35 @@ html.museo-abierto{overflow:hidden}
 .carga .btn{margin-top:16px;padding:10px 18px;font-size:14.5px}
 .barra-carga{margin-top:16px;height:7px;border-radius:7px;background:rgba(255,255,255,.14);overflow:hidden}
 .barra-carga i{display:block;height:100%;width:0;background:var(--oro);border-radius:7px;transition:width .2s}
+.pista{position:absolute;z-index:5;left:50%;top:18px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px;background:rgba(12,19,34,.9);border:1px solid rgba(255,201,89,.55);border-radius:12px;padding:10px 20px;pointer-events:none;text-align:center}
+.pista[hidden]{display:none}
+.pista strong{font-size:15.5px}
+.pista span{font-size:13px;color:#B8C4DA}
+@media (max-width:520px){
+  .esc-barra{padding:10px 12px;gap:10px}
+  .esc-barra h2{font-size:15px;line-height:1.15}
+  .salir{padding:7px 12px}
+}
+/* controles táctiles del museo (js/tactil.js) */
+.tactil{position:absolute;inset:0;z-index:6;pointer-events:none;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.tactil[hidden],.tactil-mirar[hidden],.tactil-joystick[hidden],.tb[hidden]{display:none}
+.tactil-mirar{position:absolute;top:0;right:0;bottom:0;width:56%;pointer-events:auto}
+.tactil-joystick{position:absolute;left:4%;bottom:9%;width:clamp(96px,30vh,150px);aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.38);pointer-events:auto}
+.tactil-joystick i{position:absolute;left:50%;top:50%;width:42%;height:42%;margin:-21% 0 0 -21%;border-radius:50%;background:rgba(255,201,89,.9);box-shadow:0 4px 14px rgba(0,0,0,.5);will-change:transform}
+.tactil-botones{position:absolute;right:3%;bottom:7%;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;max-width:48%}
+.tb{all:unset;box-sizing:border-box;pointer-events:auto;min-width:64px;padding:11px 14px;text-align:center;border-radius:12px;background:rgba(12,19,34,.82);border:1px solid rgba(255,255,255,.35);color:#fff;font:700 13.5px var(--f)}
+.tb:active,.tb[aria-pressed="true"]{background:var(--oro);color:var(--navy);border-color:var(--oro)}
+.tb-grande{min-width:96px;padding:15px 20px;font-size:15px;background:rgba(255,201,89,.92);color:var(--navy);border-color:var(--oro)}
+.tactil-girar{display:none;position:absolute;inset:0;place-items:center;padding:24px;text-align:center;font:700 18px var(--f);background:rgba(5,10,20,.94);pointer-events:auto}
+@media (orientation:portrait){.tactil:not([hidden]) .tactil-girar{display:grid}}
+/* celular en horizontal: el juego ocupa toda la pantalla y solo quedan Salir y el idioma arriba a la derecha */
+@media (pointer:coarse) and (orientation:landscape){
+  .escenario{grid-template-rows:1fr}
+  .esc-barra{position:absolute;top:0;right:0;z-index:8;padding:8px 10px;gap:8px;border:0}
+  .esc-barra h2,.esc-pie{display:none}
+  .esc-centro{padding:0}
+  .esc-lienzo{width:100vw;height:100vh;height:100dvh;aspect-ratio:auto;border-radius:0;box-shadow:none}
+}
 .esc-pie{padding:12px 24px 16px;font-size:14px;color:#9FB0CB;display:flex;gap:24px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.1)}
 .esc-pie b{color:#fff}
 

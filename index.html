@@ -80,10 +80,10 @@
       <ul>
         <li data-i18n="museo.p1">Una galería 3D hecha con Unity 6 que corre en el navegador.</li>
         <li data-i18n="museo.p2">Quince obras con su texto en español e inglés; te acercas y las abres.</li>
-        <li data-i18n="museo.p3">Se recorre con teclado y ratón, sin instalar nada. Descarga unos 36 MB solo cuando entras.</li>
+        <li data-i18n="museo.p3">Se recorre con teclado y ratón, o con controles táctiles en el celular en horizontal, sin instalar nada. Descarga unos 38 MB solo cuando entras.</li>
       </ul>
       <a class="btn btn-navy btn-museo" href="#museo-seccion" data-abrir-museo><span class="tecla" aria-hidden="true">↵</span><span data-i18n="hero.entrar">Entrar al museo</span></a>
-      <p class="solo-movil" hidden data-i18n="museo.movil">El museo se recorre con teclado y ratón. Ábrelo desde un computador; el resto de esta página funciona igual en el celular.</p>
+      <p class="solo-movil" hidden data-i18n="museo.movil">Este navegador no puede abrir el museo 3D porque necesita WebGL2. Prueba con otro navegador; el resto de esta página funciona igual.</p>
     </div>
   </div>
 </section>
@@ -351,13 +351,28 @@
     <div class="esc-lienzo" id="escenario-lienzo">
       <div class="carga" id="escenario-carga">
         <strong data-i18n="esc.preparando">Preparando el museo</strong>
-        <p id="escenario-carga-texto" data-i18n="esc.peso">Se descargan unos 36 MB. La próxima vez abre al instante.</p>
+        <p id="escenario-carga-texto" data-i18n="esc.peso">Se descargan unos 38 MB. La próxima vez abre al instante.</p>
         <div class="barra-carga"><i id="escenario-barra"></i></div>
       </div>
       <div class="carga" id="escenario-error" role="alert" hidden>
         <strong data-i18n="esc.error">No se pudo abrir el museo</strong>
         <p data-i18n="esc.error_texto">Revisa tu conexión e inténtalo de nuevo.</p>
         <button type="button" class="btn btn-oro" id="escenario-reintentar" data-i18n="esc.reintentar">Reintentar</button>
+      </div>
+      <div class="pista" id="escenario-pista" hidden><strong data-i18n="esc.pista">Haz clic para controlar el ratón</strong><span data-i18n="esc.pista_esc">Esc lo suelta</span></div>
+      <div class="tactil" id="tactil" hidden>
+        <div class="tactil-mirar" id="tactil-mirar"></div>
+        <div class="tactil-joystick" id="tactil-joystick" aria-hidden="true"><i></i></div>
+        <div class="tactil-botones">
+          <button type="button" class="tb tb-grande" data-accion="interactuar" data-i18n="tactil.obra">Ver obra</button>
+          <button type="button" class="tb tb-grande" data-accion="cerrar" data-i18n="tactil.cerrar" hidden>Cerrar</button>
+          <button type="button" class="tb" data-accion="correr" aria-pressed="false" data-i18n="tactil.correr">Correr</button>
+          <button type="button" class="tb" data-accion="carrito" data-i18n="tactil.carrito">Carrito</button>
+          <button type="button" class="tb" data-accion="creditos" data-i18n="tactil.creditos">Créditos</button>
+          <button type="button" class="tb" data-accion="musica" data-i18n="tactil.musica">Música</button>
+          <button type="button" class="tb" data-accion="idioma" data-i18n="tactil.idioma">Idioma</button>
+        </div>
+        <div class="tactil-girar" id="tactil-girar" data-i18n="tactil.girar">Gira el celular en horizontal para recorrer el museo</div>
       </div>
     </div>
   </div>
@@ -372,6 +387,7 @@
 <script src="js/logos.js"></script>
 <script src="js/liquido.js"></script>
 <script src="js/orbita.js"></script>
+<script src="js/tactil.js"></script>
 <script src="js/museo.js"></script>
 </body>
 </html>

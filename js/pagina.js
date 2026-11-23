@@ -1,5 +1,5 @@
 /* Interacciones de la página: barra que se vuelve sólida al bajar, filtros de proyectos y comprobación de si el visitante puede recorrer el museo.
-   API: Pagina.puedeJugar(entorno?), Pagina.marcarBarra(y), Pagina.filtrar(categoria), Pagina.iniciar(entorno?). */
+   API: Pagina.puedeJugar(entorno?), Pagina.esTactil(entorno?), Pagina.marcarBarra(y), Pagina.filtrar(categoria), Pagina.iniciar(entorno?). */
 (function () {
   let ligado = false;
 
@@ -10,13 +10,21 @@
     };
   }
 
-  /** El museo se maneja con teclado y ratón y necesita WebGL2: sin puntero fino o sin WebGL2 no se ofrece. */
+  /** El museo necesita WebGL2. Con ratón y teclado se maneja como siempre; en el celular, con los controles táctiles de js/tactil.js (en horizontal). */
   function puedeJugar(entorno) {
     const e = entorno || entornoReal();
     try {
-      if (e.matchMedia('(pointer: coarse)').matches) return false;
       const lienzo = e.crearCanvas();
       return !!(lienzo && lienzo.getContext && lienzo.getContext('webgl2'));
+    } catch (err) {
+      return false;
+    }
+  }
+
+  /** Puntero grueso (dedo): el museo se maneja con los controles táctiles. */
+  function esTactil(entorno) {
+    try {
+      return !!(entorno || entornoReal()).matchMedia('(pointer: coarse)').matches;
     } catch (err) {
       return false;
     }
@@ -50,7 +58,7 @@
     marcarBarra(window.scrollY);
   }
 
-  window.Pagina = { puedeJugar, marcarBarra, filtrar, iniciar };
+  window.Pagina = { puedeJugar, esTactil, marcarBarra, filtrar, iniciar };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => iniciar());
   else iniciar();

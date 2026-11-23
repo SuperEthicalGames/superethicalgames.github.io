@@ -21,8 +21,8 @@ window.TEXTOS_EN = {
   'museo.titulo': 'My portfolio is also walkable',
   'museo.p1': 'A 3D gallery made with Unity 6 that runs in the browser.',
   'museo.p2': 'Fifteen works with their text in Spanish and English; walk up and open them.',
-  'museo.p3': 'Played with keyboard and mouse, nothing to install. It downloads about 36 MB only when you enter.',
-  'museo.movil': 'The museum is explored with keyboard and mouse. Open it from a computer; the rest of this page works the same on a phone.',
+  'museo.p3': 'Played with keyboard and mouse, or with touch controls on a phone held sideways, nothing to install. It downloads about 38 MB only when you enter.',
+  'museo.movil': 'This browser cannot open the 3D museum because it needs WebGL2. Try another browser; the rest of this page works the same.',
 
   'proy.etiqueta': 'Projects', 'proy.titulo': 'Recent work',
   'proy.sub': 'The biggest of 2026. Each one also hangs in the museum.',
@@ -78,7 +78,10 @@ window.TEXTOS_EN = {
   'pie.creditos': 'Museum: “Art Gallery” by Zeps3D and “area 9 golf cart” by maxdragonn (CC BY 4.0). Music: Tchaikovsky, Pas de Deux. Controls and character: Unity Starter Assets.',
 
   'esc.titulo': 'Portfolio museum', 'esc.salir': 'Exit',
-  'esc.preparando': 'Preparing the museum', 'esc.peso': 'About 36 MB will download. Next time it opens instantly.',
+  'esc.preparando': 'Preparing the museum', 'esc.peso': 'About 38 MB will download. Next time it opens instantly.',
+  'esc.pista': 'Click to take control of the mouse', 'esc.pista_esc': 'Esc releases it',
+  'tactil.obra': 'View work', 'tactil.cerrar': 'Close', 'tactil.correr': 'Run', 'tactil.carrito': 'Cart', 'tactil.creditos': 'Credits',
+  'tactil.musica': 'Music', 'tactil.idioma': 'Language', 'tactil.girar': 'Rotate your phone to landscape to explore the museum',
   'esc.error': 'The museum could not open', 'esc.error_texto': 'Check your connection and try again.', 'esc.reintentar': 'Try again',
   'esc.mover': 'move', 'esc.correr': 'run', 'esc.obra': 'view work', 'esc.carrito': 'cart', 'esc.musica': 'music', 'esc.creditos': 'credits', 'esc.idioma': 'language'
 };
