@@ -48,7 +48,7 @@ window.TEXTOS_EN = {
 
   'exp.etiqueta': 'Experience', 'exp.titulo': "Where I've worked",
   'exp.sub': 'From backend support to technical lead on virtual reality products.',
-  'exp.seg.meta': 'Super Ethical Games, Medellín. 2026 to present',
+  'exp.seg.meta': 'Super Ethical Games, Medellín. Mar 2026 to present',
   'exp.seg.1': 'Uso Inmobiliario: admin panel, Android app in Unity and a WhatsApp assistant.',
   'exp.seg.2': 'Guardian AI: security agent in C#/.NET with more than 2,700 automated tests.',
   'exp.seg.3': 'Guardián de Correo and local AI agents with Ollama.',

@@ -39,9 +39,12 @@
     };
   }
 
+  /** Mientras el museo está abierto la portada queda tapada: se pausan el líquido y las tarjetas que orbitan el logo. */
   function pausarLiquido(pausa) {
-    const c = window.Liquido && window.Liquido.controlador;
-    if (c && c.pausar) c.pausar(pausa);
+    [window.Liquido, window.Orbita].forEach((m) => {
+      const c = m && m.controlador;
+      if (c && c.pausar) c.pausar(pausa);
+    });
   }
 
   function mostrarCarga() {

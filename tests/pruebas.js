@@ -230,6 +230,135 @@
     afirmar(/Super Ethical Games/i.test(img.alt), 'el logo necesita alt con el nombre');
   });
 
+  prueba('esquema_logo_vigente_del_sena_en_el_puesto_de_instructor', async ({ doc }) => {
+    const img = doc.querySelector('.puesto img[src$="img/sena.svg"]');
+    afirmar(img, 'falta el logo del SENA (img/sena.svg) en el puesto del SENA');
+    afirmar(/SENA/.test(img.alt), 'el logo del SENA necesita alt con el nombre');
+    img.loading = 'eager';
+    await esperar(1000);
+    afirmar(img.complete && img.naturalWidth > 0, 'el logo del SENA no carga');
+    const svg = await (await fetch('../img/sena.svg?t=' + Date.now())).text();
+    afirmar(/#39a900/i.test(svg), 'el logo debe usar el verde oficial vigente #39A900');
+    afirmar(!/<script|\son\w+=|<image|<foreignObject/i.test(svg), 'el SVG no debe llevar scripts ni imágenes incrustadas');
+  });
+
+  // ---- Tarjetas que orbitan el logo de la portada
+  const nuevaOrbita = (doc, ancho, alto) => {
+    const caja = doc.createElement('div');
+    caja.style.cssText = 'position:fixed;left:40px;top:40px;width:' + ancho + 'px;height:' + alto + 'px;opacity:0;pointer-events:none';
+    const a = doc.createElement('div'), b = doc.createElement('div');
+    [a, b].forEach((t) => { t.style.cssText = 'position:absolute;width:200px;height:70px'; caja.appendChild(t); });
+    doc.body.appendChild(caja);
+    return { caja, a, b };
+  };
+  const centroDe = (caja, t) => {
+    const c = caja.getBoundingClientRect(), r = t.getBoundingClientRect();
+    return { x: r.left + r.width / 2 - c.left, y: r.top + r.height / 2 - c.top };
+  };
+  const cerca = (v, esperado) => Math.abs(v - esperado) <= 1.5;
+  // Caja de 400 x 400, tarjetas de 200 x 70 y holgura de 22 px: los centros de las esquinas son (78|322, 13|387)
+  const EN_ESQUINA = (c, x, y) => cerca(c.x, x) && cerca(c.y, y);
+  const fmt = (c) => '(' + c.x.toFixed(1) + ', ' + c.y.toFixed(1) + ')';
+  const entornoOrbita = (reducido, estrecho) => ({ matchMedia: (q) => ({ matches: q.includes('reduce') ? reducido : q.includes('max-width') ? estrecho : false }) });
+
+  prueba('orbita_las_tarjetas_parten_en_esquinas_opuestas', ({ doc, win }) => {
+    afirmar(win.Orbita && typeof win.Orbita.iniciar === 'function', 'no existe window.Orbita.iniciar');
+    const { caja, a, b } = nuevaOrbita(doc, 400, 400);
+    const o = win.Orbita.iniciar(caja, [{ el: a, inicio: 3 }, { el: b, inicio: 1 }], { manual: true });
+    afirmar(o, 'Orbita.iniciar devolvió null');
+    const ca = centroDe(caja, a), cb = centroDe(caja, b);
+    o.parar(); caja.remove();
+    afirmar(EN_ESQUINA(ca, 78, 387), 'la tarjeta A debía partir abajo a la izquierda (78, 387) y está en ' + fmt(ca));
+    afirmar(EN_ESQUINA(cb, 322, 13), 'la tarjeta B debía partir arriba a la derecha (322, 13) y está en ' + fmt(cb));
+  });
+  prueba('orbita_cada_2_s_pasan_a_la_esquina_siguiente_en_sentido_horario', ({ doc, win }) => {
+    const { caja, a, b } = nuevaOrbita(doc, 400, 400);
+    const o = win.Orbita.iniciar(caja, [{ el: a, inicio: 3 }, { el: b, inicio: 1 }], { manual: true });
+    afirmar(o, 'Orbita.iniciar devolvió null');
+    o.paso(2000);
+    const a1 = centroDe(caja, a), b1 = centroDe(caja, b);
+    o.paso(2000);
+    const a2 = centroDe(caja, a), b2 = centroDe(caja, b);
+    o.parar(); caja.remove();
+    afirmar(EN_ESQUINA(a1, 78, 13) && EN_ESQUINA(b1, 322, 387), 'a los 2 s A debía estar arriba-izq. y B abajo-der.: A ' + fmt(a1) + ', B ' + fmt(b1));
+    afirmar(EN_ESQUINA(a2, 322, 13) && EN_ESQUINA(b2, 78, 387), 'a los 4 s A debía estar arriba-der. y B abajo-izq.: A ' + fmt(a2) + ', B ' + fmt(b2));
+  });
+  prueba('orbita_la_velocidad_sube_1_s_baja_1_s_y_termina_en_reposo', ({ doc, win }) => {
+    const { caja, a, b } = nuevaOrbita(doc, 400, 400);
+    const o = win.Orbita.iniciar(caja, [{ el: a, inicio: 3 }, { el: b, inicio: 1 }], { manual: true });
+    afirmar(o, 'Orbita.iniciar devolvió null');
+    const v = [];
+    let previo = centroDe(caja, b);
+    for (let i = 0; i < 20; i++) {
+      o.paso(100);
+      const c = centroDe(caja, b);
+      v.push(Math.hypot(c.x - previo.x, c.y - previo.y));
+      previo = c;
+    }
+    const final = previo;
+    o.parar(); caja.remove();
+    const pico = Math.max(...v), iPico = v.indexOf(pico), lista = v.map((x) => x.toFixed(1)).join(' ');
+    afirmar(iPico === 9 || iPico === 10, 'el pico de velocidad debía estar a mitad del ciclo (1 s) y está en la ventana ' + iPico + ': ' + lista);
+    for (let i = 1; i <= 9; i++) afirmar(v[i] > v[i - 1], 'la velocidad debía subir durante el primer segundo: ' + lista);
+    for (let i = 11; i < 20; i++) afirmar(v[i] < v[i - 1], 'la velocidad debía bajar durante el segundo siguiente: ' + lista);
+    afirmar(v[0] < pico * 0.1 && v[19] < pico * 0.1, 'debía arrancar y terminar casi en reposo: ' + lista);
+    afirmar(EN_ESQUINA(final, 322, 387), 'tras 2 s B debía llegar abajo a la derecha (322, 387) y está en ' + fmt(final));
+  });
+  prueba('orbita_las_tarjetas_no_se_salen_del_contenedor_mas_de_la_holgura', ({ doc, win }) => {
+    const { caja, a, b } = nuevaOrbita(doc, 400, 400);
+    const o = win.Orbita.iniciar(caja, [{ el: a, inicio: 3 }, { el: b, inicio: 1 }], { manual: true });
+    afirmar(o, 'Orbita.iniciar devolvió null');
+    const fuera = [];
+    for (let i = 0; i < 80; i++) {
+      o.paso(137);
+      const c = caja.getBoundingClientRect();
+      [a, b].forEach((t, k) => {
+        const r = t.getBoundingClientRect();
+        if (r.left < c.left - 23 || r.right > c.right + 23 || r.top < c.top - 23 || r.bottom > c.bottom + 23) fuera.push('tarjeta ' + 'AB'[k] + ' en el paso ' + i);
+      });
+    }
+    o.parar(); caja.remove();
+    afirmar(fuera.length === 0, 'tarjetas fuera de la holgura: ' + fuera.slice(0, 3).join(', '));
+  });
+  prueba('orbita_no_se_activa_con_movimiento_reducido_ni_en_pantalla_estrecha', ({ doc, win }) => {
+    const { caja, a, b } = nuevaOrbita(doc, 400, 400);
+    const t = [{ el: a, inicio: 3 }, { el: b, inicio: 1 }];
+    const reducido = win.Orbita.iniciar(caja, t, { entorno: entornoOrbita(true, false), manual: true });
+    const estrecho = win.Orbita.iniciar(caja, t, { entorno: entornoOrbita(false, true), manual: true });
+    const tocadas = a.style.transform !== '' || b.style.transform !== '';
+    caja.remove();
+    afirmar(reducido === null, 'con movimiento reducido debía devolver null');
+    afirmar(estrecho === null, 'en pantalla estrecha (celular) debía devolver null');
+    afirmar(!tocadas, 'sin animación no debía tocar las tarjetas');
+  });
+  prueba('orbita_parar_devuelve_las_tarjetas_a_su_sitio', ({ doc, win }) => {
+    const { caja, a, b } = nuevaOrbita(doc, 400, 400);
+    a.style.cssText += ';left:-5%;bottom:-7%';
+    const antesA = a.style.cssText, antesB = b.style.cssText;
+    const o = win.Orbita.iniciar(caja, [{ el: a, inicio: 3 }, { el: b, inicio: 1 }], { manual: true });
+    afirmar(o, 'Orbita.iniciar devolvió null');
+    o.paso(700);
+    const movida = a.style.transform !== '';
+    o.parar();
+    const despuesA = a.style.cssText, despuesB = b.style.cssText;
+    caja.remove();
+    afirmar(movida, 'al avanzar la tarjeta debía tener transform');
+    afirmar(despuesA === antesA && despuesB === antesB, 'parar() debía devolver el estilo original: "' + antesA + '" → "' + despuesA + '"');
+  });
+  prueba('esquema_hero_las_tarjetas_orbitan_el_logo', async ({ doc, win }) => {
+    const a = doc.querySelector('.retrato .chip-a'), b = doc.querySelector('.retrato .chip-b');
+    afirmar(a && b, 'faltan las tarjetas del logo en la portada');
+    afirmar(win.Orbita && win.Orbita.controlador, 'la órbita debía arrancar en pantalla ancha');
+    const inicial = a.getBoundingClientRect();
+    let movida = false;
+    for (let i = 0; i < 50 && !movida; i++) {
+      await esperar(100);
+      const r = a.getBoundingClientRect();
+      movida = Math.abs(r.left - inicial.left) + Math.abs(r.top - inicial.top) > 1.5;
+    }
+    afirmar(movida, 'la tarjeta "Actualmente" debía moverse alrededor del logo');
+  });
+
   // ---- Tarea 4c: efecto de líquido
   const entornoLiquido = (reducido, webgl2, extension) => ({
     matchMedia: (q) => ({ matches: q.includes('reduce') ? reducido : false }),
@@ -308,6 +437,47 @@
     c.parar();
     caja.remove();
     afirmar(c.activo() === false, 'debía quedar inactivo tras parar');
+  });
+  // Una ventana que aún no tiene tamaño (pestaña en segundo plano, panel recién abierto) dejaba el líquido apagado para siempre:
+  // con un lienzo casi sin ancho se pedían texturas de decenas de miles de píxeles, WebGL las rechazaba y iniciar() devolvía null.
+  prueba('liquido_arranca_aunque_el_lienzo_no_tenga_tamano_al_cargar', ({ doc, win }) => {
+    const { caja, lienzo } = nuevoLienzo(doc, 1, 700);
+    let c = null, error = null;
+    try { c = win.Liquido.iniciar(lienzo, { ambiente: false }); } catch (e) { error = e; }
+    const devolvio = !!c;
+    if (c) c.parar();
+    caja.remove();
+    afirmar(!error, 'iniciar lanzó una excepción con el lienzo sin tamaño: ' + (error && error.message));
+    afirmar(devolvio, 'con un lienzo de 1 x 700 px debía devolver el controlador y devolvió null');
+  });
+  prueba('liquido_empieza_a_dibujar_cuando_el_lienzo_recibe_tamano', async ({ doc, win }) => {
+    const { caja, lienzo } = nuevoLienzo(doc, 1, 700);
+    const c = win.Liquido.iniciar(lienzo, { ambiente: false });
+    afirmar(c, 'no devolvió el controlador con el lienzo sin tamaño');
+    c.salpicar(0.5, 0.5, 300, 100, OR); c.paso(1 / 60);   // sin tamaño útil no debe lanzar ni dejar tinta
+    const antes = c.tinta();
+    caja.style.width = '400px'; caja.style.height = '240px';
+    // el observador de tamaño avisa en el siguiente cuadro de la página (en un panel oculto puede tardar ~1 s): se espera la condición, no un tiempo fijo
+    let despues = 0;
+    for (let i = 0; i < 30 && !(despues > 0.0005); i++) {
+      await esperar(100);
+      c.salpicar(0.5, 0.5, 300, 100, OR);
+      for (let k = 0; k < 4; k++) c.paso(1 / 60);
+      despues = c.tinta();
+    }
+    c.parar(); caja.remove();
+    afirmar(antes === 0, 'sin tamaño útil la tinta debía ser 0 y es ' + antes);
+    afirmar(despues > 0.0005, 'al recibir tamaño debía empezar a dibujar y la tinta es ' + despues);
+  });
+  prueba('liquido_arranca_con_un_lienzo_muy_largo_y_angosto', ({ doc, win }) => {
+    const { caja, lienzo } = nuevoLienzo(doc, 20, 1500);
+    const c = win.Liquido.iniciar(lienzo, { ambiente: false });
+    afirmar(c, 'con un lienzo de 20 x 1500 px debía devolver el controlador y devolvió null');
+    c.salpicar(0.5, 0.5, 300, 100, OR);
+    for (let i = 0; i < 4; i++) c.paso(1 / 60);
+    const t = c.tinta();
+    c.parar(); caja.remove();
+    afirmar(t > 0.0005, 'en un lienzo largo y angosto el líquido debía dibujar y la tinta es ' + t);
   });
   prueba('esquema_canvas_liquido_no_bloquea_clics', ({ doc, win }) => {
     const lienzo = doc.querySelector('.hero #liquido');

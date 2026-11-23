@@ -119,9 +119,12 @@ void main() {
     for (let i = 0; i < n; i++) { const nombre = gl.getActiveUniform(p, i).name; u[nombre] = gl.getUniformLocation(p, nombre); }
     return { p, u };
   }
+  const MIN_LADO = 16;       // por debajo de esto el lienzo aún no tiene un tamaño útil (pestaña en segundo plano, ventana recién abierta)
+  const MAX_PROPORCION = 4;  // las texturas no se estiran más que esto: con un lienzo largo y angosto superarían el máximo de WebGL
   function resolucion(base, aspecto) {
-    const menor = Math.round(base), mayor = Math.round(base * (aspecto < 1 ? 1 / aspecto : aspecto));
-    return aspecto > 1 ? { w: mayor, h: menor } : { w: menor, h: mayor };
+    const a = Math.min(MAX_PROPORCION, Math.max(1 / MAX_PROPORCION, aspecto));
+    const menor = Math.round(base), mayor = Math.round(base * (a < 1 ? 1 / a : a));
+    return a > 1 ? { w: mayor, h: menor } : { w: menor, h: mayor };
   }
 
   function iniciar(lienzo, opciones) {
@@ -171,9 +174,12 @@ void main() {
       return { get leer() { return a; }, get escribir() { return b; }, cambiar() { const t = a; a = b; b = t; }, w, h, texel: [1 / w, 1 / h] };
     }
 
-    let aspecto = 1, sim, tinta, velocidad, presion, divergencia, rotacional;
+    let aspecto = 1, sim, tinta, velocidad, presion, divergencia, rotacional, listo = false;
+    /** Crea las texturas para el tamaño actual del lienzo. Con un lienzo sin tamaño útil no hace nada (queda `listo` en false) y lo reintenta el observador de tamaño. */
     function construir() {
-      const w = Math.max(2, Math.round(lienzo.clientWidth * AJUSTES.escalaLienzo)), h = Math.max(2, Math.round(lienzo.clientHeight * AJUSTES.escalaLienzo));
+      const ancho = lienzo.clientWidth, alto = lienzo.clientHeight;
+      if (ancho < MIN_LADO || alto < MIN_LADO) { listo = false; return false; }
+      const w = Math.max(2, Math.round(ancho * AJUSTES.escalaLienzo)), h = Math.max(2, Math.round(alto * AJUSTES.escalaLienzo));
       lienzo.width = w; lienzo.height = h;
       aspecto = w / h;
       sim = resolucion(AJUSTES.resSimulacion, aspecto); tinta = resolucion(AJUSTES.resTinta, aspecto);
@@ -182,6 +188,8 @@ void main() {
       divergencia = crearFBO(sim.w, sim.h, gl.R16F, gl.RED, gl.NEAREST);
       rotacional = crearFBO(sim.w, sim.h, gl.R16F, gl.RED, gl.NEAREST);
       tintaFBO = doble(tinta.w, tinta.h, gl.RGBA16F, gl.RGBA, gl.LINEAR);
+      listo = true;
+      return true;
     }
     let tintaFBO;
     construir();
@@ -198,6 +206,7 @@ void main() {
     }
 
     function salpicar(x, y, dx, dy, color) {
+      if (!listo) return;
       let pr = usar(P.salpicar);
       gl.uniform1f(pr.u.aspecto, aspecto); gl.uniform2f(pr.u.punto, x, y); gl.uniform1f(pr.u.radio, AJUSTES.radio * (aspecto > 1 ? aspecto : 1));
       gl.uniform2fv(pr.u.texel, velocidad.texel);
@@ -209,6 +218,7 @@ void main() {
     }
 
     function paso(dt) {
+      if (!listo) return;
       let pr = usar(P.rotacional);
       gl.uniform2fv(pr.u.texel, velocidad.texel); gl.uniform1i(pr.u.uVelocidad, ligar(0, velocidad.leer.textura)); dibujar(rotacional);
 
@@ -243,6 +253,7 @@ void main() {
     }
 
     function pintar() {
+      if (!listo) return;
       const pr = usar(P.mostrar);
       gl.uniform2fv(pr.u.texel, tintaFBO.texel); gl.uniform1i(pr.u.uTextura, ligar(0, tintaFBO.leer.textura));
       gl.clearColor(0, 0, 0, 0); gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, lienzo.width, lienzo.height); gl.clear(gl.COLOR_BUFFER_BIT);
@@ -251,6 +262,7 @@ void main() {
 
     /** Promedio del canal más fuerte de la tinta en toda la textura (para pruebas y para saber si queda algo que animar). */
     function medirTinta() {
+      if (!listo) return 0;
       const n = tintaFBO.leer.w * tintaFBO.leer.h * 4;
       const datos = new Float32Array(n);
       gl.bindFramebuffer(gl.FRAMEBUFFER, tintaFBO.leer.fbo);
@@ -310,7 +322,8 @@ void main() {
     if ('ResizeObserver' in window) {
       let ultimoAncho = lienzo.clientWidth, ultimoAlto = lienzo.clientHeight;
       reajuste = new ResizeObserver(() => {
-        if (Math.abs(lienzo.clientWidth - ultimoAncho) > 40 || Math.abs(lienzo.clientHeight - ultimoAlto) > 40) {
+        const cambio = Math.abs(lienzo.clientWidth - ultimoAncho) > 40 || Math.abs(lienzo.clientHeight - ultimoAlto) > 40;
+        if (!listo || cambio) {
           ultimoAncho = lienzo.clientWidth; ultimoAlto = lienzo.clientHeight; construir();
         }
       });
