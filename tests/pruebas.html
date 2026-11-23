@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>PRUEBAS …</title>
+<style>body{font:14px/1.5 system-ui,sans-serif;margin:16px}pre{white-space:pre-wrap}.ok{color:#0a7a2f}.mal{color:#b00020}iframe{border:1px solid #ccc;display:block;margin-top:12px}</style>
+</head>
+<body>
+<h1>Pruebas del sitio</h1>
+<pre id="salida">Ejecutando…</pre>
+<iframe id="pagina" title="Página bajo prueba" style="width:1280px;height:7000px"></iframe>
+<script>document.getElementById('pagina').src = '../index.html?t=' + Date.now(); /* evita usar una copia en caché */</script>
+<script src="pruebas.js"></script>
+</body>
+</html>

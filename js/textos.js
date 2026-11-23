@@ -1,0 +1,84 @@
+/* Traducciones al inglés. El español vive en index.html (atributo data-i18n = clave).
+   Si una clave falta aquí, la página conserva el texto en español. */
+window.TEXTOS_EN = {
+  'meta.titulo': 'Sebastián Segovia Medina | Game and virtual reality developer',
+  'meta.descripcion': 'Game developer in Medellín, Colombia: Unity, Unreal, Meta Quest and the backend behind games. Portfolio with an interactive museum in the browser.',
+
+  'saltar': 'Skip to content',
+  'nav.museo': 'Museum', 'nav.proyectos': 'Projects', 'nav.experiencia': 'Experience', 'nav.contacto': 'Contact', 'nav.cv': 'Download CV',
+
+  'hero.pastilla': 'Open to opportunities in Colombia and remote',
+  'hero.titulo': 'Game and virtual reality developer',
+  'hero.texto': 'I work with Unity, Unreal and Meta Quest. I design the game architecture and the backend behind it: authentication, licensing, progress and data.',
+  'hero.entrar': 'Enter the museum', 'hero.proyectos': 'See projects', 'hero.trabajo': 'I work with',
+  'hero.obras': 'works', 'hero.obras_sub': 'in the interactive museum',
+  'hero.actualmente': 'Currently', 'hero.cargo': 'Sr Gameplay & Rendering Engineer', 'hero.empresa': 'Super Ethical Games, Medellín',
+
+  'cifras.unity': 'years with Unity', 'cifras.unreal': 'years with Unreal Engine',
+  'cifras.vr': 'VR apps for Meta Quest', 'cifras.pruebas': 'automated tests in Guardian AI',
+
+  'museo.etiqueta': 'Interactive portfolio',
+  'museo.titulo': 'My portfolio is also walkable',
+  'museo.p1': 'A 3D gallery made with Unity 6 that runs in the browser.',
+  'museo.p2': 'Fifteen works with their text in Spanish and English; walk up and open them.',
+  'museo.p3': 'Played with keyboard and mouse, nothing to install. It downloads about 36 MB only when you enter.',
+  'museo.movil': 'The museum is explored with keyboard and mouse. Open it from a computer; the rest of this page works the same on a phone.',
+
+  'proy.etiqueta': 'Projects', 'proy.titulo': 'Recent work',
+  'proy.sub': 'The biggest of 2026. Each one also hangs in the museum.',
+  'filtro.todos': 'All', 'filtro.vr': 'Virtual reality', 'filtro.backend': 'Portals and backend', 'filtro.ia': 'AI and tools',
+  'p.amazonas': 'Virtual reality rehabilitation: fishing, drinking water and memory in an open world of six tiles with narration.',
+  'p.eje': 'Rehabilitation app with an offline access code and a results journal. 375 commits.',
+  'p.cartagena': 'Remake with a crowd of non-player characters wearing Genies clothing. Phase 1 is done.',
+  'p.uso': 'Furnished-apartment catalog in Medellín: admin panel, Android app with phone sign-in and a WhatsApp assistant.',
+  'p.guardian': 'Local security agent for Windows that scores risk with verifiable rules and acts only on evidence. 2,700+ tests.',
+  'enlace.museo': 'See it in the museum', 'enlace.demo': 'Demo ↗', 'enlace.presentacion': 'View presentation ↗',
+  'proy.todas.titulo': 'Every work in the museum',
+  'proy.todas.texto': 'Each project hangs from its own frame. Walk in, go up to it and open it.',
+
+  'ant.etiqueta': 'Past projects', 'ant.titulo': 'Before 2026',
+  'ant.sub': 'Virtual reality, metaverse and event experiences from my time at Creative Innovation Company. They also hang in the museum.',
+  'ant.venus.quien': 'Creative Innovation Company. Client: Camsoda',
+  'ant.venus.texto': 'Metaverse platform with hyper-realistic Metahuman avatars, real-time face tracking and live-streaming systems.',
+  'tag.vr': 'Virtual reality', 'tag.neuro': 'Neuroeducation', 'tag.asistente': 'AI assistant', 'tag.eventos': 'Events',
+  'ant.rolimate.texto': "Gamified virtual reality experience that improves children's cognitive and physical abilities through neuroeducation technologies.",
+  'ant.office.texto': "Virtual reality office tour guided by an AI assistant named ZIA, showing the company's products and its employees.",
+  'ant.boom.texto': 'High-intensity virtual reality experience built for live events and brand activation campaigns.',
+  'mas.titulo': 'More 2026 works in the museum', 'mas.agentes': 'Local AI agents',
+
+  'exp.etiqueta': 'Experience', 'exp.titulo': "Where I've worked",
+  'exp.sub': 'From backend support to technical lead on virtual reality products.',
+  'exp.seg.meta': 'Super Ethical Games, Medellín. 2026 to present',
+  'exp.seg.1': 'Uso Inmobiliario: admin panel, Android app in Unity and a WhatsApp assistant.',
+  'exp.seg.2': 'Guardian AI: security agent in C#/.NET with more than 2,700 automated tests.',
+  'exp.seg.3': 'Guardián de Correo and local AI agents with Ollama.',
+  'exp.sena.cargo': 'Instructor', 'exp.sena.meta': 'SENA, Antioquia Regional. Sep to Dec 2026',
+  'exp.sena.1': '48-hour generative AI course: modules 3 and 4 for five groups.',
+  'exp.sena.2': '15 virtual reality sessions with older adults on Meta Quest 3.',
+  'exp.sena.3': "Development of SEAM's three VR apps, its admin portal and its operations console.",
+  'exp.cic.cargo': 'Game Developer, VR lead', 'exp.cic.meta': 'Creative Innovation Company, Medellín. Oct 2024 to Mar 2026',
+  'exp.cic.1': 'Backend, licensing and authentication for gamified virtual reality experiences.',
+  'exp.cic.2': 'Production and pipelines for standalone hardware such as Meta Quest 2.',
+  'exp.isc.cargo': 'Software Developer (remote)', 'exp.isc.meta': 'Impresoras y Suministros de Colombia. 2020 to 2022',
+  'exp.isc.1': 'Web, multimedia and animations for augmented reality prototypes.',
+
+  'hab.etiqueta': 'Skills', 'hab.titulo': 'What I build with',
+  'hab.motores': 'Engines and virtual reality', 'hab.prog': 'Programming', 'hab.backend': 'Backend and data', 'hab.forma': 'How I work',
+  'hab.licencias': 'Licensing', 'hab.revision': 'Code review', 'hab.optimizacion': 'Optimization', 'hab.pruebas': 'Automated testing',
+
+  'edu.etiqueta': 'Education and languages', 'edu.titulo': 'Studies',
+  'edu.upb.titulo': 'Digital Entertainment Design Engineering',
+  'edu.upb.meta': 'Universidad Pontificia Bolivariana, Medellín. Jul 2020 to Aug 2025',
+  'edu.idiomas': 'Languages', 'edu.idiomas.meta': 'Spanish native. English B2.',
+
+  'con.titulo': 'Shall we talk?',
+  'con.texto': "I'm looking to join a studio or product team in Colombia, or remote, to bring solid game systems to production.",
+  'con.ciudad': 'Medellín, Colombia',
+  'con.cv.es': 'Hoja de vida en español', 'con.cv.es_sub': 'Download PDF', 'con.cv.en': 'Resume in English', 'con.cv.en_sub': 'Download PDF',
+  'pie.creditos': 'Museum: “Art Gallery” by Zeps3D and “area 9 golf cart” by maxdragonn (CC BY 4.0). Music: Tchaikovsky, Pas de Deux. Controls and character: Unity Starter Assets.',
+
+  'esc.titulo': 'Portfolio museum', 'esc.salir': 'Exit',
+  'esc.preparando': 'Preparing the museum', 'esc.peso': 'About 36 MB will download. Next time it opens instantly.',
+  'esc.error': 'The museum could not open', 'esc.error_texto': 'Check your connection and try again.', 'esc.reintentar': 'Try again',
+  'esc.mover': 'move', 'esc.correr': 'run', 'esc.obra': 'view work', 'esc.carrito': 'cart', 'esc.musica': 'music', 'esc.creditos': 'credits', 'esc.idioma': 'language'
+};

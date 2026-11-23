@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sebastián Segovia Medina | Desarrollador de videojuegos y realidad virtual</title>
+<meta name="description" content="Desarrollador de videojuegos en Medellín: Unity, Unreal, Meta Quest y el backend que sostiene los juegos. Portafolio con un museo interactivo en el navegador.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Sebastián Segovia Medina | Desarrollador de videojuegos y realidad virtual">
+<meta property="og:description" content="Unity, Unreal, Meta Quest y backend para juegos. Recorre mis proyectos en un museo 3D dentro del navegador.">
+<meta property="og:image" content="https://superethicalgames.github.io/img/museo.jpg">
+<meta name="theme-color" content="#070B14">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23FFC959'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='700' font-size='28' text-anchor='middle' fill='%231B1405'%3ESS%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Oswald:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+<a class="saltar" href="#contenido" data-i18n="saltar">Saltar al contenido</a>
+
+<nav class="nav" aria-label="Principal">
+  <div class="contenedor fila">
+    <a class="logo" href="#inicio"><i>SS</i>Sebastián Segovia</a>
+    <ul>
+      <li><a href="#museo-seccion" data-i18n="nav.museo">Museo</a></li>
+      <li><a href="#proyectos" data-i18n="nav.proyectos">Proyectos</a></li>
+      <li><a href="#experiencia" data-i18n="nav.experiencia">Experiencia</a></li>
+      <li><a href="#contacto" data-i18n="nav.contacto">Contacto</a></li>
+    </ul>
+    <div class="idioma" role="group" aria-label="Idioma">
+      <button type="button" data-idioma="es" aria-pressed="true">ES</button>
+      <button type="button" data-idioma="en" aria-pressed="false">EN</button>
+    </div>
+    <a class="btn btn-linea" href="#contacto" data-i18n="nav.cv">Descargar CV</a>
+  </div>
+</nav>
+
+<header class="hero" id="inicio">
+  <canvas id="liquido" aria-hidden="true"></canvas>
+  <div class="contenedor">
+    <div>
+      <span class="pastilla" data-i18n="hero.pastilla">Abierto a oportunidades en Colombia y remoto</span>
+      <h1 data-i18n="hero.titulo">Desarrollador de videojuegos y realidad virtual</h1>
+      <p class="lead" data-i18n="hero.texto">Trabajo con Unity, Unreal y Meta Quest. Diseño la arquitectura del juego y el backend que lo sostiene: autenticación, licencias, progreso y datos.</p>
+      <div class="acciones">
+        <a class="btn btn-oro btn-museo" href="#museo-seccion" data-abrir-museo><span class="tecla" aria-hidden="true">↵</span><span data-i18n="hero.entrar">Entrar al museo</span></a>
+        <a class="btn btn-linea" href="#proyectos" data-i18n="hero.proyectos">Ver proyectos</a>
+      </div>
+      <p class="tecnologias"><span data-i18n="hero.trabajo">Trabajo con</span><b data-logo="unity">Unity</b><b data-logo="unrealengine">Unreal Engine</b><b>C#</b><b data-logo="typescript">TypeScript</b><b data-logo="python">Python</b><b data-logo="firebase">Firebase</b></p>
+    </div>
+    <div class="retrato">
+      <img class="foto" src="https://avatars.githubusercontent.com/u/316433644?v=4&amp;s=460" alt="Super Ethical Games: Can it be ethical?" width="460" height="460" fetchpriority="high">
+      <div class="chip chip-b"><span class="num">15</span><div><b data-i18n="hero.obras">obras</b><small data-i18n="hero.obras_sub">en el museo interactivo</small></div></div>
+      <div class="chip chip-a"><small data-i18n="hero.actualmente">Actualmente</small><b data-i18n="hero.cargo">Sr Gameplay &amp; Rendering Engineer</b><small data-i18n="hero.empresa">Super Ethical Games, Medellín</small></div>
+    </div>
+  </div>
+</header>
+
+<main id="contenido">
+
+<section class="cifras" aria-label="Cifras">
+  <div class="contenedor">
+    <div><strong>5+</strong><span data-i18n="cifras.unity">años con Unity</span></div>
+    <div><strong>2+</strong><span data-i18n="cifras.unreal">años con Unreal Engine</span></div>
+    <div><strong>3</strong><span data-i18n="cifras.vr">apps de realidad virtual para Meta Quest</span></div>
+    <div><strong>2.700+</strong><span data-i18n="cifras.pruebas">pruebas automáticas en Guardian AI</span></div>
+  </div>
+</section>
+
+<section class="seccion museo" id="museo-seccion">
+  <div class="contenedor">
+    <div class="ventana">
+      <div class="barra"><i></i><i></i><i></i><span>superethicalgames.github.io/museo</span></div>
+      <img src="img/museo.jpg" alt="Captura del museo interactivo: un personaje frente a un cuadro de la selva amazónica" width="1280" height="720" loading="lazy">
+    </div>
+    <div>
+      <span class="etiqueta" data-i18n="museo.etiqueta">Portafolio interactivo</span>
+      <h2 data-i18n="museo.titulo">Mi portafolio también se camina</h2>
+      <ul>
+        <li data-i18n="museo.p1">Una galería 3D hecha con Unity 6 que corre en el navegador.</li>
+        <li data-i18n="museo.p2">Quince obras con su texto en español e inglés; te acercas y las abres.</li>
+        <li data-i18n="museo.p3">Se recorre con teclado y ratón, sin instalar nada. Descarga unos 36 MB solo cuando entras.</li>
+      </ul>
+      <a class="btn btn-navy btn-museo" href="#museo-seccion" data-abrir-museo><span class="tecla" aria-hidden="true">↵</span><span data-i18n="hero.entrar">Entrar al museo</span></a>
+      <p class="solo-movil" hidden data-i18n="museo.movil">El museo se recorre con teclado y ratón. Ábrelo desde un computador; el resto de esta página funciona igual en el celular.</p>
+    </div>
+  </div>
+</section>
+
+<section class="seccion suave" id="proyectos">
+  <div class="contenedor">
+    <div class="encabezado">
+      <span class="etiqueta" data-i18n="proy.etiqueta">Proyectos</span>
+      <h2 data-i18n="proy.titulo">Trabajo reciente</h2>
+      <p data-i18n="proy.sub">Los más grandes de 2026. Cada uno cuelga también en el museo.</p>
+    </div>
+    <div class="filtros" role="group" aria-label="Filtrar proyectos">
+      <button type="button" data-filtro="todos" aria-pressed="true" data-i18n="filtro.todos">Todos</button>
+      <button type="button" data-filtro="vr" aria-pressed="false" data-i18n="filtro.vr">Realidad virtual</button>
+      <button type="button" data-filtro="backend" aria-pressed="false" data-i18n="filtro.backend">Portales y backend</button>
+      <button type="button" data-filtro="ia" aria-pressed="false" data-i18n="filtro.ia">IA y herramientas</button>
+    </div>
+    <div class="rejilla">
+      <article class="tarjeta" data-categoria="vr">
+        <div class="img"><img src="img/amazonas.jpg" alt="Selva de SEAM Amazonas" width="1280" height="720" loading="lazy"></div>
+        <div class="cuerpo">
+          <div class="tags"><span data-logo="unity">Unity 6</span><span>OpenXR</span><span data-logo="meta">Meta Quest</span></div>
+          <h3>SEAM Amazonas</h3>
+          <p data-i18n="p.amazonas">Rehabilitación en realidad virtual: pesca, beber agua y memoria en un mundo abierto de seis mosaicos con narración.</p>
+          <div class="enlaces"><a href="#museo-seccion" data-obra="seam-amazonas" data-i18n="enlace.museo">Verlo en el museo</a></div>
+        </div>
+      </article>
+      <article class="tarjeta" data-categoria="vr">
+        <div class="img"><img src="img/eje.jpg" alt="Módulo 1 de SEAM Eje Cafetero" width="1280" height="720" loading="lazy"></div>
+        <div class="cuerpo">
+          <div class="tags"><span data-logo="unity">Unity 6</span><span data-logo="firebase">Firebase</span><span data-logo="meta">Meta Quest</span></div>
+          <h3>SEAM Eje Cafetero</h3>
+          <p data-i18n="p.eje">App de rehabilitación con código de acceso sin conexión y diario de resultados. 375 commits.</p>
+          <div class="enlaces"><a href="#museo-seccion" data-obra="seam-eje-cafetero" data-i18n="enlace.museo">Verlo en el museo</a></div>
+        </div>
+      </article>
+      <article class="tarjeta" data-categoria="vr">
+        <div class="img"><img src="img/cartagena.jpg" alt="Multitud de personajes en SEAM Cartagena" width="1280" height="640" loading="lazy"></div>
+        <div class="cuerpo">
+          <div class="tags"><span data-logo="unity">Unity 6</span><span data-logo="unity">DOTS</span></div>
+          <h3>SEAM Cartagena</h3>
+          <p data-i18n="p.cartagena">Remake con una multitud de personajes no jugadores vestidos con ropa de Genies. La fase 1 está hecha.</p>
+          <div class="enlaces"><a href="#museo-seccion" data-obra="seam-cartagena" data-i18n="enlace.museo">Verlo en el museo</a></div>
+        </div>
+      </article>
+      <article class="tarjeta" data-categoria="backend">
+        <div class="img"><img src="img/uso.jpg" alt="Uso Inmobiliario colgado en la galería del museo" width="1280" height="720" loading="lazy"></div>
+        <div class="cuerpo">
+          <div class="tags"><span data-logo="unity">Unity</span><span data-logo="react">React</span><span data-logo="firebase">Firebase</span></div>
+          <h3>Uso Inmobiliario</h3>
+          <p data-i18n="p.uso">Catálogo de apartamentos amoblados en Medellín: panel de administración, app Android con ingreso por teléfono y asistente de WhatsApp.</p>
+          <div class="enlaces"><a href="#museo-seccion" data-obra="uso-inmobiliario" data-i18n="enlace.museo">Verlo en el museo</a><a href="https://superethicalgames.github.io/usoinmobiliario-webdemo/" target="_blank" rel="noopener noreferrer" data-i18n="enlace.demo">Demo ↗</a></div>
+        </div>
+      </article>
+      <article class="tarjeta" data-categoria="ia">
+        <div class="img"><img src="img/guardian.jpg" alt="Guardian AI colgado en la galería del museo" width="1280" height="720" loading="lazy"></div>
+        <div class="cuerpo">
+          <div class="tags"><span>C#</span><span data-logo="dotnet">.NET</span><span>WPF</span></div>
+          <h3>Guardian AI</h3>
+          <p data-i18n="p.guardian">Agente local de seguridad para Windows que puntúa el riesgo con reglas verificables y actúa solo con evidencia. Más de 2.700 pruebas.</p>
+          <div class="enlaces"><a href="#museo-seccion" data-obra="guardian-ai" data-i18n="enlace.museo">Verlo en el museo</a></div>
+        </div>
+      </article>
+      <article class="tarjeta tarjeta-oscura">
+        <h3 data-i18n="proy.todas.titulo">Todas las obras en el museo</h3>
+        <p data-i18n="proy.todas.texto">Cada proyecto cuelga de su cuadro. Entra, camina hasta él y ábrelo.</p>
+        <a class="btn btn-oro btn-museo" href="#museo-seccion" data-abrir-museo><span class="tecla" aria-hidden="true">↵</span><span data-i18n="hero.entrar">Entrar al museo</span></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="seccion" id="anteriores">
+  <div class="contenedor">
+    <div class="encabezado">
+      <span class="etiqueta" data-i18n="ant.etiqueta">Proyectos anteriores</span>
+      <h2 data-i18n="ant.titulo">Antes de 2026</h2>
+      <p data-i18n="ant.sub">Realidad virtual, metaverso y experiencias para eventos, de mi etapa en Creative Innovation Company. También cuelgan en el museo.</p>
+    </div>
+    <div class="rejilla-2">
+      <article class="tarjeta horizontal">
+        <div class="img"><img src="https://media.githubusercontent.com/media/Sego-Thedevlab/images-gifs/main/Projects/MetaVenus.png" alt="Meta Venus" width="800" height="500" loading="lazy"></div>
+        <div class="cuerpo">
+          <div class="tags"><span data-logo="unrealengine">Unreal Engine</span><span>Metahuman</span></div>
+          <h3>Meta Venus</h3>
+          <div class="quien" data-i18n="ant.venus.quien">Creative Innovation Company. Cliente: Camsoda</div>
+          <p data-i18n="ant.venus.texto">Plataforma de metaverso con avatares Metahuman hiperrealistas, seguimiento facial en tiempo real y sistemas de transmisión en vivo.</p>
+          <div class="enlaces"><a href="#museo-seccion" data-obra="meta-venus" data-i18n="enlace.museo">Verlo en el museo</a><a href="https://docs.google.com/presentation/d/1-uq_wjShEb_chuhnd25sXdbnl9WBImAd-jWShb1SZEs/present?slide=id.g3df7bd35f58_0_82" target="_blank" rel="noopener noreferrer" data-i18n="enlace.presentacion">Ver presentación ↗</a></div>
+        </div>
+      </article>
+      <article class="tarjeta horizontal">
+        <div class="img"><img src="https://media.githubusercontent.com/media/Sego-Thedevlab/images-gifs/main/Projects/Rolimate.png" alt="Rolimate" width="800" height="500" loading="lazy"></div>
+        <div class="cuerpo">
+          <div class="tags"><span data-i18n="tag.vr">Realidad virtual</span><span data-i18n="tag.neuro">Neuroeducación</span></div>
+          <h3>Rolimate</h3>
+          <div class="quien">Creative Innovation Company</div>
+          <p data-i18n="ant.rolimate.texto">Experiencia de realidad virtual gamificada para mejorar las capacidades cognitivas y físicas de niños mediante tecnologías de neuroeducación.</p>
+          <div class="enlaces"><a href="#museo-seccion" data-obra="rolimate" data-i18n="enlace.museo">Verlo en el museo</a><a href="https://docs.google.com/presentation/d/1-uq_wjShEb_chuhnd25sXdbnl9WBImAd-jWShb1SZEs/present?slide=id.g3df7bd35f58_0_3" target="_blank" rel="noopener noreferrer" data-i18n="enlace.presentacion">Ver presentación ↗</a></div>
+        </div>
+      </article>
+      <article class="tarjeta horizontal">
+        <div class="img"><img src="https://media.githubusercontent.com/media/Sego-Thedevlab/images-gifs/main/Projects/OfficeTour.png" alt="Office Tour" width="800" height="500" loading="lazy"></div>
+        <div class="cuerpo">
+          <div class="tags"><span data-i18n="tag.vr">Realidad virtual</span><span data-i18n="tag.asistente">Asistente de IA</span></div>
+          <h3>Office Tour</h3>
+          <div class="quien">Creative Innovation Company</div>
+          <p data-i18n="ant.office.texto">Recorrido de oficina en realidad virtual guiado por un asistente de IA llamado ZIA, que muestra los productos de la empresa y a sus empleados.</p>
+          <div class="enlaces"><a href="#museo-seccion" data-obra="office-tour" data-i18n="enlace.museo">Verlo en el museo</a><a href="https://docs.google.com/presentation/d/1-uq_wjShEb_chuhnd25sXdbnl9WBImAd-jWShb1SZEs/present?slide=id.g3df7bd35f58_0_33" target="_blank" rel="noopener noreferrer" data-i18n="enlace.presentacion">Ver presentación ↗</a></div>
+        </div>
+      </article>
+      <article class="tarjeta horizontal">
+        <div class="img"><img src="https://media.githubusercontent.com/media/Sego-Thedevlab/images-gifs/main/Projects/ItsBoom.png" alt="It's Boom" width="800" height="500" loading="lazy"></div>
+        <div class="cuerpo">
+          <div class="tags"><span data-i18n="tag.vr">Realidad virtual</span><span data-i18n="tag.eventos">Eventos</span></div>
+          <h3>It's Boom</h3>
+          <div class="quien">Creative Innovation Company</div>
+          <p data-i18n="ant.boom.texto">Experiencia de realidad virtual de alta intensidad desarrollada para eventos en vivo y campañas de activación de marca.</p>
+          <div class="enlaces"><a href="#museo-seccion" data-obra="its-boom" data-i18n="enlace.museo">Verlo en el museo</a><a href="https://docs.google.com/presentation/d/1-uq_wjShEb_chuhnd25sXdbnl9WBImAd-jWShb1SZEs/present?slide=id.g3df7bd35f58_0_51" target="_blank" rel="noopener noreferrer" data-i18n="enlace.presentacion">Ver presentación ↗</a></div>
+        </div>
+      </article>
+    </div>
+    <div class="mas-obras">
+      <p data-i18n="mas.titulo">Más obras de 2026 en el museo</p>
+      <a href="#museo-seccion" data-obra="seam-middleware">SEAM Middleware</a>
+      <a href="#museo-seccion" data-obra="seam-operaciones">SEAM Operaciones</a>
+      <a href="#museo-seccion" data-obra="seam-suite-vr">SEAM Suite VR</a>
+      <a href="#museo-seccion" data-obra="app-excel">App Excel</a>
+      <a href="#museo-seccion" data-obra="guardian-correo">Guardián de Correo</a>
+      <a href="#museo-seccion" data-obra="agentes-ia-local" data-i18n="mas.agentes">Agentes de IA local</a>
+    </div>
+  </div>
+</section>
+
+<section class="seccion suave" id="experiencia">
+  <div class="contenedor exp">
+    <div class="encabezado">
+      <span class="etiqueta" data-i18n="exp.etiqueta">Experiencia</span>
+      <h2 data-i18n="exp.titulo">Dónde he trabajado</h2>
+      <p data-i18n="exp.sub">Del soporte de backend a la dirección técnica de productos de realidad virtual.</p>
+      <a class="btn btn-claro" href="#contacto" style="margin-top:22px" data-i18n="nav.cv">Descargar CV</a>
+    </div>
+    <div class="linea-tiempo">
+      <article class="puesto">
+        <div class="logo-emp"><img src="https://github.com/SuperEthicalGames.png?size=128" alt="Super Ethical Games" width="128" height="128" loading="lazy"></div>
+        <div>
+          <h3>Sr Gameplay &amp; Rendering Engineer</h3>
+          <p class="meta" data-i18n="exp.seg.meta">Super Ethical Games, Medellín. 2026 hasta hoy</p>
+          <ul>
+            <li data-i18n="exp.seg.1">Uso Inmobiliario: panel de administración, app Android en Unity y asistente de WhatsApp.</li>
+            <li data-i18n="exp.seg.2">Guardian AI: agente de seguridad en C#/.NET con más de 2.700 pruebas automáticas.</li>
+            <li data-i18n="exp.seg.3">Guardián de Correo y agentes de IA local con Ollama.</li>
+          </ul>
+        </div>
+      </article>
+      <article class="puesto">
+        <div class="logo-emp" aria-hidden="true">SENA</div>
+        <div>
+          <h3 data-i18n="exp.sena.cargo">Instructor</h3>
+          <p class="meta" data-i18n="exp.sena.meta">SENA, Regional Antioquia. Sep a Dic 2026</p>
+          <ul>
+            <li data-i18n="exp.sena.1">Curso de IA generativa de 48 horas: módulos 3 y 4 para cinco grupos.</li>
+            <li data-i18n="exp.sena.2">15 sesiones de realidad virtual con adultos mayores en Meta Quest 3.</li>
+            <li data-i18n="exp.sena.3">Desarrollo de las tres apps VR de SEAM, su portal de administración y su consola de operaciones.</li>
+          </ul>
+        </div>
+      </article>
+      <article class="puesto">
+        <div class="logo-emp"><img src="https://media.githubusercontent.com/media/Sego-Thedevlab/images-gifs/main/Experiences/CIC.png" alt="Creative Innovation Company" width="128" height="128" loading="lazy"></div>
+        <div>
+          <h3 data-i18n="exp.cic.cargo">Game Developer, líder de realidad virtual</h3>
+          <p class="meta" data-i18n="exp.cic.meta">Creative Innovation Company, Medellín. Oct 2024 a Mar 2026</p>
+          <ul>
+            <li data-i18n="exp.cic.1">Backend, licenciamiento y autenticación de experiencias de realidad virtual gamificadas.</li>
+            <li data-i18n="exp.cic.2">Producción y pipelines para hardware independiente como Meta Quest 2.</li>
+          </ul>
+        </div>
+      </article>
+      <article class="puesto">
+        <div class="logo-emp"><img src="https://media.githubusercontent.com/media/Sego-Thedevlab/images-gifs/main/Experiences/ISC.png" alt="Impresoras y Suministros de Colombia" width="128" height="128" loading="lazy"></div>
+        <div>
+          <h3 data-i18n="exp.isc.cargo">Software Developer (remoto)</h3>
+          <p class="meta" data-i18n="exp.isc.meta">Impresoras y Suministros de Colombia. 2020 a 2022</p>
+          <ul>
+            <li data-i18n="exp.isc.1">Web, multimedia y animaciones para prototipos de realidad aumentada.</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="seccion" id="habilidades">
+  <div class="contenedor">
+    <div class="encabezado"><span class="etiqueta" data-i18n="hab.etiqueta">Habilidades</span><h2 data-i18n="hab.titulo">Con qué construyo</h2></div>
+    <div class="habilidades">
+      <div><h3 data-i18n="hab.motores">Motores y realidad virtual</h3><div class="grupo"><span data-logo="unity">Unity</span><span data-logo="unrealengine">Unreal Engine</span><span data-logo="meta">Meta Quest</span><span>OpenXR</span><span>Shader Graph</span><span>VFX Graph</span></div></div>
+      <div><h3 data-i18n="hab.prog">Programación</h3><div class="grupo"><span data-logo="dotnet">C# / .NET</span><span data-logo="python">Python</span><span data-logo="typescript">TypeScript</span><span data-logo="react">React</span><span data-logo="nodedotjs">Node.js</span><span data-logo="c">C</span></div></div>
+      <div><h3 data-i18n="hab.backend">Backend y datos</h3><div class="grupo"><span data-logo="firebase">Firebase</span><span>SQL</span><span>REST</span><span data-i18n="hab.licencias">Licenciamiento</span><span>WooCommerce</span></div></div>
+      <div><h3 data-i18n="hab.forma">Forma de trabajar</h3><div class="grupo"><span data-logo="github">Git / GitHub</span><span>Scrum</span><span data-i18n="hab.revision">Revisión de código</span><span data-i18n="hab.optimizacion">Optimización</span><span data-i18n="hab.pruebas">Pruebas automáticas</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="seccion suave" id="formacion">
+  <div class="contenedor">
+    <div class="encabezado"><span class="etiqueta" data-i18n="edu.etiqueta">Formación e idiomas</span><h2 data-i18n="edu.titulo">Estudios</h2></div>
+    <div class="rejilla-2">
+      <article class="puesto">
+        <div class="logo-emp"><img src="https://media.githubusercontent.com/media/Sego-Thedevlab/images-gifs/main/Education/UPB.png" alt="Universidad Pontificia Bolivariana" width="128" height="128" loading="lazy"></div>
+        <div>
+          <h3 data-i18n="edu.upb.titulo">Ingeniería de Diseño de Entretenimiento Digital</h3>
+          <p class="meta" data-i18n="edu.upb.meta">Universidad Pontificia Bolivariana, Medellín. Jul 2020 a Ago 2025</p>
+        </div>
+      </article>
+      <article class="puesto">
+        <div class="logo-emp" aria-hidden="true">ES·EN</div>
+        <div>
+          <h3 data-i18n="edu.idiomas">Idiomas</h3>
+          <p class="meta" data-i18n="edu.idiomas.meta">Español nativo. Inglés B2.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<section class="contacto" id="contacto">
+  <div class="contenedor">
+    <div>
+      <h2 data-i18n="con.titulo">¿Hablamos?</h2>
+      <p data-i18n="con.texto">Busco sumarme a un estudio o equipo de producto en Colombia, o remoto, para llevar sistemas de juego sólidos a producción.</p>
+      <div class="datos">
+        <a href="mailto:sebastiansegoviamedina@gmail.com">sebastiansegoviamedina@gmail.com</a>
+        <span>+57 317 728 3760</span>
+        <span data-i18n="con.ciudad">Medellín, Colombia</span>
+      </div>
+      <div class="redes"><a href="https://linkedin.com/in/sebastian-segovia-medina" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="https://github.com/Sego-Thedevlab" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://github.com/SuperEthicalGames" target="_blank" rel="noopener noreferrer">Super Ethical Games</a><a href="https://bit.ly/3Ps9kiY" target="_blank" rel="noopener noreferrer">Portfolio</a></div>
+    </div>
+    <div class="tarjetas-cv">
+      <a class="cv" href="cv/CV_Sebastian_Segovia_ES.pdf" target="_blank" rel="noopener"><i>PDF</i><span><b data-i18n="con.cv.es">Hoja de vida en español</b><small data-i18n="con.cv.es_sub">Descargar PDF</small></span></a>
+      <a class="cv" href="cv/CV_Sebastian_Segovia_EN.pdf" target="_blank" rel="noopener"><i>PDF</i><span><b data-i18n="con.cv.en">Resume in English</b><small data-i18n="con.cv.en_sub">Download PDF</small></span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="contenedor">
+    <span>© 2026 Sebastián Segovia Medina</span>
+    <span data-i18n="pie.creditos">Museo: “Art Gallery” de Zeps3D y “area 9 golf cart” de maxdragonn (CC BY 4.0). Música: Chaikovski, Pas de Deux. Controles y personaje: Starter Assets de Unity.</span>
+  </div>
+</footer>
+
+<!-- Escenario del museo: lo abre js/museo.js -->
+<div class="escenario" id="escenario" role="dialog" aria-modal="true" aria-labelledby="escenario-titulo" hidden>
+  <div class="esc-barra">
+    <h2 id="escenario-titulo" data-i18n="esc.titulo">Museo del portafolio</h2>
+    <div class="idioma" role="group" aria-label="Idioma">
+      <button type="button" data-idioma="es" aria-pressed="true">ES</button>
+      <button type="button" data-idioma="en" aria-pressed="false">EN</button>
+    </div>
+    <button type="button" class="salir" id="escenario-salir"><span data-i18n="esc.salir">Salir</span> <span aria-hidden="true">✕</span></button>
+  </div>
+  <div class="esc-centro">
+    <div class="esc-lienzo" id="escenario-lienzo">
+      <div class="carga" id="escenario-carga">
+        <strong data-i18n="esc.preparando">Preparando el museo</strong>
+        <p id="escenario-carga-texto" data-i18n="esc.peso">Se descargan unos 36 MB. La próxima vez abre al instante.</p>
+        <div class="barra-carga"><i id="escenario-barra"></i></div>
+      </div>
+      <div class="carga" id="escenario-error" role="alert" hidden>
+        <strong data-i18n="esc.error">No se pudo abrir el museo</strong>
+        <p data-i18n="esc.error_texto">Revisa tu conexión e inténtalo de nuevo.</p>
+        <button type="button" class="btn btn-oro" id="escenario-reintentar" data-i18n="esc.reintentar">Reintentar</button>
+      </div>
+    </div>
+  </div>
+  <div class="esc-pie">
+    <span><b>WASD</b> <span data-i18n="esc.mover">mover</span></span><span><b>Shift</b> <span data-i18n="esc.correr">correr</span></span><span><b>E</b> <span data-i18n="esc.obra">ver obra</span></span><span><b>F</b> <span data-i18n="esc.carrito">carrito</span></span><span><b>M</b> <span data-i18n="esc.musica">música</span></span><span><b>C</b> <span data-i18n="esc.creditos">créditos</span></span><span><b>L</b> <span data-i18n="esc.idioma">idioma</span></span>
+  </div>
+</div>
+
+<script src="js/textos.js"></script>
+<script src="js/idioma.js"></script>
+<script src="js/pagina.js"></script>
+<script src="js/logos.js"></script>
+<script src="js/liquido.js"></script>
+<script src="js/museo.js"></script>
+</body>
+</html>
