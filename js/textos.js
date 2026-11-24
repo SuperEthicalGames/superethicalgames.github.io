@@ -80,8 +80,8 @@ window.TEXTOS_EN = {
   'esc.titulo': 'Portfolio museum', 'esc.salir': 'Exit',
   'esc.preparando': 'Preparing the museum', 'esc.peso': 'About 38 MB will download. Next time it opens instantly.',
   'esc.pista': 'Click to take control of the mouse', 'esc.pista_esc': 'Esc releases it',
-  'tactil.obra': 'View work', 'tactil.cerrar': 'Close', 'tactil.correr': 'Run', 'tactil.carrito': 'Cart', 'tactil.creditos': 'Credits',
+  'tactil.obra': 'View work', 'tactil.cerrar': 'Close', 'tactil.correr': 'Run', 'tactil.creditos': 'Credits',
   'tactil.musica': 'Music', 'tactil.idioma': 'Language', 'tactil.girar': 'Rotate your phone to landscape to explore the museum',
   'esc.error': 'The museum could not open', 'esc.error_texto': 'Check your connection and try again.', 'esc.reintentar': 'Try again',
-  'esc.mover': 'move', 'esc.correr': 'run', 'esc.obra': 'view work', 'esc.carrito': 'cart', 'esc.musica': 'music', 'esc.creditos': 'credits', 'esc.idioma': 'language'
+  'esc.mover': 'move', 'esc.correr': 'run', 'esc.obra': 'view work', 'esc.musica': 'music', 'esc.creditos': 'credits', 'esc.idioma': 'language'
 };

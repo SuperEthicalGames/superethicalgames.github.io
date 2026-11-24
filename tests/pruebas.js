@@ -791,7 +791,7 @@
     await conEscenarioVisible(doc, async () => {
       const { c, enviados } = nuevoTactil(win);
       c.activar(true);
-      const acciones = ['interactuar', 'carrito', 'creditos', 'musica', 'idioma', 'cerrar'];
+      const acciones = ['interactuar', 'creditos', 'musica', 'idioma', 'cerrar'];
       acciones.forEach((n) => {
         const b = doc.querySelector('#tactil [data-accion="' + n + '"]');
         afirmar(b, 'falta el botón de la acción ' + n);
